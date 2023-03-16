@@ -13,7 +13,6 @@ export default function Definition() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        //const url = 'https://httpstat.us/501';
         const url = 'https://api.dictionaryapi.dev/api/v2/entries/en/' + search;
         fetch(url)
             .then((response) => {
