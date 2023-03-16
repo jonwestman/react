@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { baseUrl } from "../shared";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   function login(e) {
     e.preventDefault();
@@ -22,7 +26,13 @@ export default function Login() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        localStorage.setItem("access", data.access);
+        localStorage.setItem("refresh", data.refresh);
+        navigate(
+          location?.state?.previousUrl
+            ? location.state.previousUrl
+            : "/customers"
+        );
       });
   }
 

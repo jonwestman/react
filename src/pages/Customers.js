@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import AddCustomer from "../components/AddCustomer";
 import { baseUrl } from "../shared";
 
@@ -11,14 +11,24 @@ export default function Customers() {
     setShow(!show);
   }
 
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const url = baseUrl + "api/customers";
-    fetch(url)
+    fetch(url, {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
+      },
+    })
       .then((response) => {
         if (response.status === 401) {
-          navigate("/login");
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
         }
         return response.json();
       })
